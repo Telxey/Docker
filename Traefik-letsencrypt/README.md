@@ -5,9 +5,9 @@ Create basicauth for traefik
 
 RUN below command to generate basicauth
 #### NOTE:
-Replace <USER> with your username and <PASSWORD> with your password to be hashed.
+Replace USER with your username and PASSWORD with your password to be hashed.
 
-    echo $(htpasswd -nb "<USER>" "<PASSWORD>") | sed -e s/\\$/\\$\\$/g
+    echo $(htpasswd -nb "USER" "PASSWORD") | sed -e s/\\$/\\$\\$/g
 
  If you’re having an issue with your password, it might not be escaped properly 
     and you can use the following command to prompt for your password
