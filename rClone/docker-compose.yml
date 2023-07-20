@@ -14,7 +14,7 @@ services:
       - /home/ubuntu/docker/rclone-dashboard/sync_script:/sync_script #script to allow remote execution of backups (e.g., rclone copy --checksum --verbose --transfers 1 --checkers 4 --contimeout 60s --timeout 300s --retries 3 --low-level-retries 10 --stats 1s /YOUR_FOLDER YOUR_REMOTE:REMOTE_FOLDER/sync_script)
       - /home/ubuntu/truenas:/data #this is my truenas SMB share - change to wherever you store the data you wish to upload
     environment:
-      - PHP_TZ=Europe/London
+      - PHP_TZ=America/New_York
     networks:
       proxy: #remove the proxy network if you're not using traefik
     labels: #remove the labels section if you're not using traefik
