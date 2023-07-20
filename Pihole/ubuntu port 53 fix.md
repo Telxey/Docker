@@ -1,4 +1,6 @@
-#run these commands to fix port bind error
+## ubuntu port 53 fix
+
+RUN these commands to fix port bind error
 
     sudo sed -r -i.orig 's/#?DNSStubListener=yes/DNSStubListener=no/g' /etc/systemd/resolved.conf
 
