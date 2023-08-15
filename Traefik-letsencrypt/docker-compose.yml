@@ -40,6 +40,6 @@ services:
       - "traefik.http.middlewares.traefik-auth.basicauth.users=traefik-auth"
 
 networks:
-    default:
-        name: proxy
+  proxy:
+    external: true
       
