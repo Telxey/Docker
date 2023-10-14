@@ -23,4 +23,4 @@ echo \
   sudo docker run hello-world
   sudo docker --version
   sudo docker ps
-  rm docker.sh
+  # rm docker.sh
