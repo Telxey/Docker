@@ -4,7 +4,6 @@
 # License: MIT
 # https://github.com//Telxey/Docker/raw/main/LICENSE
 function header_info {
-clear
 cat <<"EOF"
 __      __ ___            _  _     ___     _       ___   
 \ \    / // __|    ___   | || |   / _ \   | |     | __|  
@@ -15,9 +14,11 @@ _|"""""|_|"""""|_|     |_|"""""|_|"""""|_|"""""|_|"""""|
  
 EOF
 }
-mkdir /home/docker && mkdir /home/docker/secrets
-cd /home/docker
+sleep 10
+mkdir /home/docker && mkdir /home/docker/secrets && cd /home/docker
+sleep 10
 wget -O wghole.yaml https://github.com/Telxey/Docker/blob/main/stacks/wghole/wghole.yaml
+sleep 5
 wget -O secrets/db.env.sample  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db.env.sample
 wget -O secrets/server.env.sample https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/server.env.sample
 nano secrets/db.env.sample
@@ -32,13 +33,18 @@ then
 fi
 docker compose -f wghole.yaml up -d
 
-msg_ok "Completed Successfully install nginix proxy manager!\n"
-echo -e "${APP} should be reachable by going to the following URL.
-         ${BL}http://${IP}:81${CL} \n"
-msg_ok "Completed Successfully install pi-hole!\n"
-echo -e "${APP} should be reachable by going to the following URL.
-         ${BL}http://${IP}:5353/admin${CL} \n"  
-msg_ok "Completed Successfully install wireguard-UI!\n"
-echo -e "${APP} should be reachable by going to the following URL.
-         ${BL}http://${IP}:51821${CL} \n"         
-
+cat <<EOF
+     Completed Successfully install nginix proxy manager
+     should be reachable by going to the following URL.
+         http://HOST_IP:81
+         defaul-user = admin@example.com
+         dfault password = changeme
+         
+     Completed Successfully install pi-hole
+     should be reachable by going to the following URL.
+         http://HOST_IP:5353/admin
+         
+     Completed Successfully install wireguard-UI
+     should be reachable by going to the following URL.
+         http://HOST_IP:51821        
+EOF
