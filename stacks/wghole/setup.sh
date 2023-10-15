@@ -17,7 +17,7 @@ EOF
 }
 mkdir /home/docker
 cd /home/docker
-https://github.com/Telxey/Docker/.git
+wget -O https://github.com/Telxey/Docker/blob/main/stacks/wghole/wghole.yaml
 nano  wghole.yaml
 docker compose -f wghole.yaml up -d
 
