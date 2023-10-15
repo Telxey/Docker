@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 secrets:
   # Secrets are single-line text files where the sole content is the secret
@@ -7,37 +7,37 @@ secrets:
     file: secrets/db_root_pwd.txt
   MYSQL_PWD:
     file: secrets/mysql_pwd.txt
-  PIHOLE_PWD:  
-    file: secrets/pihole_pwd.txt
-  WG_EASY_PWD:
-    file: secrets/wg_easy_pwd.txt
-    
+
+services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
     container_name: npm
     restart: unless-stopped
     ports:
-      # These ports are in format <host-port>:<container-port>
-      - '80:80' # Public HTTP Port
-      - '443:443' # Public HTTPS Port
-      - '81:81' # Admin Web Port
+      # Public HTTP Port:
+      - '80:80'
+      # Public HTTPS Port:
+      - '443:443'
+      # Admin Web Port:
+      - '81:81'
       # Add any other Stream port you want to expose
       # - '21:21' # FTP
     environment:
-      ## Mysql/Maria connection parameters:
+      # These are the settings to access your db
       DB_MYSQL_HOST: "db"
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: "npm_admin"
-      # DB_MYSQL_PASSWORD: "npm_xxxxxxxxx" 
+      # DB_MYSQL_PASSWORD: "npm"  # use secret instead
       DB_MYSQL_PASSWORD__FILE: /run/secrets/MYSQL_PWD
-      DB_MYSQL_NAME: "npm_db_ngnix"
+      DB_MYSQL_NAME: "npm_db_nginx"
+      # If you would rather use Sqlite, remove all DB_MYSQL_* lines above
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
-   secrets:
-      - MYSQL_PWD  
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
+    secrets:
+      - MYSQL_PWD
     depends_on:
       - db
     networks:
@@ -45,105 +45,23 @@ secrets:
         ipv4_address: 10.13.1.5  
 
   db:
-    image: mariadb:latest
+    image: jc21/mariadb-aria
     container_name: npm-db
     restart: unless-stopped
-    # environment:
-      # MYSQL_ROOT_PASSWORD: 'super-secret-password'
+    environment:
+      # MYSQL_ROOT_PASSWORD: "npm"  # use secret instead
       MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
-      MYSQL_DATABASE: 'npm_db_ngnix'
-      MYSQL_USER: 'npm_admin'
-      # MYSQL_PASSWORD: 'npm_xxxxxxxxxx'
-      DB_MYSQL_PASSWORD__FILE: /run/secrets/MYSQL_PWD
+      MYSQL_DATABASE: "npm_db_nginx"
+      MYSQL_USER: "npm_admin"
+      # MYSQL_PASSWORD: "npm"  # use secret instead
+      MYSQL_PASSWORD__FILE: /run/secrets/MYSQL_PWD
     volumes:
-      - ./mysql:/var/lib/mysql  
+      - ./mysql:/var/lib/mysql
     secrets:
       - DB_ROOT_PWD
-      - MYSQL_PWD  
+      - MYSQL_PWD
     networks:
       wg-easy:
         ipv4_address: 10.13.1.253      
       
-  cloudflared:
-    container_name: cloudflared
-    # Restart on crashes and on reboots
-    restart: unless-stopped
-    image: cloudflare/cloudflared:latest
-    command: proxy-dns
-    environment:
-      - "TUNNEL_DNS_UPSTREAM=https://1.1.1.1/dns-query,https://1.0.0.1/dns-query,https://9.9.9.9/dns-query,https://149.112.112.9/dns-query"
-
-      # Listen on an unprivileged port
-      - "TUNNEL_DNS_PORT=5053"
-
-      # Listen on all interfaces
-      - "TUNNEL_DNS_ADDRESS=0.0.0.0"
-
-    # Attach cloudflared only to the private network
-    networks:
-      wg-easy:
-        ipv4_address: 10.13.1.254
-    security_opt:
-      - no-new-privileges:true
-  wg-easy:
-    environment:
-      # ⚠️ Change the server's hostname (clients will connect to):
-      # - WG_HOST=wgn.domain.com
-
-      # ⚠️ Change the Web UI Password:
-      - PASSWORD=super_secret_password
-      # PASSWORD__FILE: /run/secrets/WG_EASY_PWD
-      # 💡 This is the Pi-Hole Container's IP Address
-      - WG_DEFAULT_DNS=10.13.1.3
-      - WG_DEFAULT_ADDRESS=10.13.0.x
-    image: weejewel/wg-easy
-    container_name: wg-easy
-     secrets:
-      - WG_EASY_PWD 
-    volumes:
-      - ~/.wg-easy:/etc/wireguard
-    ports:
-      - "51820:51820/udp"
-      - "51821:51821/tcp"
-    restart: unless-stopped
-    cap_add:
-      - NET_ADMIN
-      - SYS_MODULE
-    sysctls:
-      - net.ipv4.ip_forward=1
-      - net.ipv4.conf.all.src_valid_mark=1
-    networks:
-      wg-easy:
-        ipv4_address: 10.13.1.2
-
-  pihole:
-    image: pihole/pihole
-    container_name: pihole
-    environment:
-      # ⚠️ Change the Web UI Password:
-      - WEBPASSWORD=supersecretpassord
-      #WEBPASSWORD__FILE: /run/secrets/PIHOLE_PWD
-      - TZ=America/New_York
-      - DNS1=10.13.1.254#5053
-      - DNS2=no
-      - DNSMASQ_LISTENING=all
-      # - VIRTUAL_HOST=wghole.domain.com
-    secrets:
-      - PIHOLE_PWD   
-    volumes:
-      - '~/.pihole/etc-pihole:/etc/pihole'
-      - '~/.pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "5353:80/tcp"
-    restart: unless-stopped
-    networks:
-      wg-easy:
-        ipv4_address: 10.13.1.3
-
-networks:
-  wg-easy:
-    ipam:
-      config:
-        - subnet: 10.13.1.0/24
+ 
