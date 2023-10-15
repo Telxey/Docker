@@ -7,10 +7,10 @@ secrets:
     file: secrets/db_root_pwd.txt
   MYSQL_PWD:
     file: secrets/mysql_pwd.txt
-  #PIHOLE_PWD:  
-   # file: secrets/pihole_pwd.txt
-  #WG_EASY_PWD:
-   # file: secrets/wg_easy_pwd.txt
+  PIHOLE_PWD:  
+    file: secrets/pihole_pwd.txt
+  WG_EASY_PWD:
+    file: secrets/wg_easy_pwd.txt
     
   app:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -54,7 +54,7 @@ secrets:
       MYSQL_DATABASE: 'npm_db_ngnix'
       MYSQL_USER: 'npm_admin'
       # MYSQL_PASSWORD: 'npm_xxxxxxxxxx'
-      MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
+      DB_MYSQL_PASSWORD__FILE: /run/secrets/MYSQL_PWD
     volumes:
       - ./mysql:/var/lib/mysql  
     secrets:
