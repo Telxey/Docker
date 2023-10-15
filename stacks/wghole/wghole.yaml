@@ -62,6 +62,14 @@ services:
       - MYSQL_PWD
     networks:
       wg-easy:
-        ipv4_address: 10.13.1.253      
+        ipv4_address: 10.13.1.253   
+
+networks:
+  wg-easy:
+    ipam:
+      config:
+        - subnet: 10.13.1.0/24
+        
+
       
  
