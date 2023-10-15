@@ -7,7 +7,7 @@
 mkdir /home/docker && mkdir /home/docker/secrets 
 cd .. 
 cd docker
-wget -O wghole.yaml https://github.com/Telxey/Docker/blob/main/stacks/wghole/wghole.yaml
+wget -O wghole.yaml https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/wghole.yaml
 wget -O secrets/db.env.sample  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db.env.sample
 wget -O secrets/server.env.sample https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/server.env.sample
 sleep 5
