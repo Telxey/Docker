@@ -14,24 +14,30 @@ _|"""""|_|"""""|_|     |_|"""""|_|"""""|_|"""""|_|"""""|
  
 EOF
 }
-sleep 10
-mkdir /home/docker && mkdir /home/docker/secrets && cd /home/docker
-sleep 10
+sleep 5
+mkdir /home/docker && mkdir /home/docker/secrets /
+sleep 10 /
+
+cd /home/docker /
 wget -O wghole.yaml https://github.com/Telxey/Docker/blob/main/stacks/wghole/wghole.yaml
 sleep 5
 wget -O secrets/db.env.sample  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db.env.sample
 wget -O secrets/server.env.sample https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/server.env.sample
+sleep 5
 nano secrets/db.env.sample
 nano secrets/server.env.sample
 if [ ! -f ./secrets/db.env ]
 then
   cp ./secrets/db.env.sample ./secrets/db.env
 fi
+sleep 5
 if [ ! -f ./secrets/server.env ]
 then
   cp ./secrets/server.env.sample ./secrets/server.env
 fi
-docker compose -f wghole.yaml up -d
+cp wghole.yaml docker-compose.yml
+
+docker compose up -d
 
 cat <<EOF
      Completed Successfully install nginix proxy manager
