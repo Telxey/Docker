@@ -1,13 +1,5 @@
 version: "3.8"
 
-secrets:
-  # Secrets are single-line text files where the sole content is the secret
-  # Paths in this example assume that secrets are kept in local folder called ".secrets"
-  DB_ROOT_PWD:
-    file: .secrets/db_root_pwd.txt
-  MYSQL_PWD:
-    file: .secrets/mysql_pwd.txt
-
 services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -20,15 +12,17 @@ services:
       - '81:81' # Admin Web Port
       # Add any other Stream port you want to expose
       # - '21:21' # FTP
-    environment:
-      # Mysql/Maria connection parameters:
-      DB_MYSQL_HOST: "db"
-      DB_MYSQL_PORT: 3306
-      DB_MYSQL_USER: "npm_Doormat0595"
-      DB_MYSQL_PASSWORD: "npm_wrp46nK3CXAZcqBBSjSB5Vws"
-      DB_MYSQL_NAME: "npm_Giddily0145"
+    # environment:
+      ## Mysql/Maria connection parameters:
+      # DB_MYSQL_HOST: "db"
+      # DB_MYSQL_PORT: 3306
+      # DB_MYSQL_USER: "npm_srname"
+      # DB_MYSQL_PASSWORD: "npm_xxxxxxxxx"
+      # DB_MYSQL_NAME: "npm_db_name"
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
+    env_file:
+      - ./secrets/db.env  
     volumes:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
@@ -42,18 +36,20 @@ services:
     image: mariadb:latest
     container_name: npm-db
     restart: unless-stopped
-    environment:
+    # environment:
       # MYSQL_ROOT_PASSWORD: 'super-secret-password'
-      MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
-      MYSQL_DATABASE: 'npm_db_name'
-      MYSQL_USER: 'npm_Doormat0595'
+      # MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
+      # MYSQL_DATABASE: 'npm_db_name'
+      # MYSQL_USER: 'npm_username'
       # MYSQL_PASSWORD: 'npm_xxxxxxxxxx'
-      MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
+      # MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
+    env_file:
+      - ./secrets/db.env  
     volumes:
       - ./mysql:/var/lib/mysql  
-    secrets:
-      - DB_ROOT_PWD
-      - MYSQL_PWD  
+    # secrets:
+      # - DB_ROOT_PWD
+      # - MYSQL_PWD  
     networks:
       wg-easy:
         ipv4_address: 10.13.1.253      
