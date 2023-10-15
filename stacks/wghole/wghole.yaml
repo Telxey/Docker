@@ -76,12 +76,14 @@ services:
     security_opt:
       - no-new-privileges:true
   wg-easy:
-    environment:
+    # environment:
       # ⚠️ Change the server's hostname (clients will connect to):
-      - WG_HOST=wgn.ximp.ly
+      # - WG_HOST=wgn.domain.com
 
       # ⚠️ Change the Web UI Password:
-      - PASSWORD=p4oHfAMFtqYx6hLW8dp3d8Q7zcT5Tn7CaY4W
+      # - PASSWORD=super_secret_password
+    env_file:
+      - ./secrets/server.env  
 
       # 💡 This is the Pi-Hole Container's IP Address
       - WG_DEFAULT_DNS=10.13.1.3
@@ -107,10 +109,12 @@ services:
   pihole:
     image: pihole/pihole
     container_name: pihole
+    env_file:
+      - ./secrets/server.env
     environment:
       # ⚠️ Change the Web UI Password:
-      - WEBPASSWORD=p4oHfAMFtqYx6hLW8dp3d8Q7zcT5Tn7CaY4W
-      - TZ=America/New_York
+      # - WEBPASSWORD=supersecretpassord
+      # - TZ=America/New_York
       - DNS1=172.70.9.2#5053
       - DNS2=no
       - DNSMASQ_LISTENING=all
