@@ -29,17 +29,19 @@ cat <<EOF
          defaul-user = admin@example.com
          dfault password = changeme
 EOF
+-
 cat <<EOF
      Completed Successfully install pi-hole
      should be reachable by going to the following URL.
          http://HOST_IP:5353/admin
         PI-HOLE Web UI Password below
 EOF
-cat secrets/pihole_pwd.txt
+         cat secrets/pihole_pwd.txt
+
 cat <<EOF
      Completed Successfully install wireguard-UI
      should be reachable by going to the following URL.
          http://HOST_IP:51821 
        Wireguard-UI Password below  
 EOF
-cat secrets/wg_easy_pwd.txt
+          cat secrets/wg_easy_pwd.txt
