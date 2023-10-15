@@ -4,13 +4,13 @@ secrets:
   # Secrets are single-line text files where the sole content is the secret
   # Paths in this example assume that secrets are kept in local folder called ".secrets"
   DB_ROOT_PWD:
-    file: secrets/db_root_pwd.txt
+    file: .secrets/db_root_pwd.txt
   MYSQL_PWD:
-    file: secrets/mysql_pwd.txt
+    file: .secrets/mysql_pwd.txt
   PIHOLE_PWD:  
-    file: secrets/pihole_pwd.txt
+    file: .secrets/pihole_pwd.txt
   WG_EASY_PWD:
-    file: secrets/wg_easy_pwd.txt
+    file: .secrets/wg_easy_pwd.txt
     
   app:
     image: 'jc21/nginx-proxy-manager:latest'
