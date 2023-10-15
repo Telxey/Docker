@@ -4,13 +4,13 @@ secrets:
   # Secrets are single-line text files where the sole content is the secret
   # Paths in this example assume that secrets are kept in local folder called ".secrets"
   DB_ROOT_PWD:
-    file: .secrets/db_root_pwd.txt
+    file: secrets/db_root_pwd.txt
   MYSQL_PWD:
-    file: .secrets/mysql_pwd.txt
-  PIHOLE_PWD:  
-    file: .secrets/pihole_pwd.txt
-  WG_EASY_PWD:
-    file: .secrets/wg_easy_pwd.txt
+    file: secrets/mysql_pwd.txt
+  #PIHOLE_PWD:  
+   # file: secrets/pihole_pwd.txt
+  #WG_EASY_PWD:
+   # file: secrets/wg_easy_pwd.txt
     
   app:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -91,8 +91,8 @@ secrets:
       # - WG_HOST=wgn.domain.com
 
       # ⚠️ Change the Web UI Password:
-      # - PASSWORD=super_secret_password
-      PASSWORD__FILE: /run/secrets/WG_EASY_PWD
+      - PASSWORD=super_secret_password
+      # PASSWORD__FILE: /run/secrets/WG_EASY_PWD
       # 💡 This is the Pi-Hole Container's IP Address
       - WG_DEFAULT_DNS=10.13.1.3
       - WG_DEFAULT_ADDRESS=10.13.0.x
@@ -121,8 +121,8 @@ secrets:
     container_name: pihole
     environment:
       # ⚠️ Change the Web UI Password:
-      # - WEBPASSWORD=supersecretpassord
-      WEBPASSWORD__FILE: /run/secrets/PIHOLE_PWD
+      - WEBPASSWORD=supersecretpassord
+      #WEBPASSWORD__FILE: /run/secrets/PIHOLE_PWD
       - TZ=America/New_York
       - DNS1=10.13.1.254#5053
       - DNS2=no
