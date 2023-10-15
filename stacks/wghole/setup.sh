@@ -5,9 +5,9 @@
 # https://github.com//Telxey/Docker/raw/main/LICENSE
 
 mkdir /home/docker && mkdir /home/docker/wghole
-PATH='/home/docker/wghole'     
-cd ${PATH}
-# cd /home/docker/wghole
+#PATH='/home/docker/wghole'     
+#cd ${PATH}
+cd /home/docker/wghole
 mkdir secrets
 wget -O wghole.yaml https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/wghole.yaml
 wget -O secrets/db_root_pwd.txt  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db_root_pwd.txt
