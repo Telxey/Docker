@@ -6,17 +6,17 @@
 
 mkdir /home/docker && mkdir /home/docker/wghole
 cd /home/docker/wghole
-mkdir sedrets
+mkdir .sedcrets
 wget -O wghole.yaml https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/wghole.yaml
-wget -O secrets/db_root_pwd.txt  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db_root_pwd.txt
-wget -O secrets/mysql_pwd.txt https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/mysql_pwd.txt
-wget -O secrets/pihole_pwd.txt  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/pihole_pwd.txt
-wget -O secrets/wg_easy_pwd.txt https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/wg_easy_pwd.txt
+wget -O .secrets/db_root_pwd.txt  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db_root_pwd.txt
+wget -O .secrets/mysql_pwd.txt https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/mysql_pwd.txt
+wget -O .secrets/pihole_pwd.txt  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/pihole_pwd.txt
+wget -O .secrets/wg_easy_pwd.txt https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/wg_easy_pwd.txt
 sleep 5
-nano secrets/db_root_pwd.txt
-nano secrets/mysql_pwd.txt
-nano secrets/pihole_pwd.txt
-nano secrets/wg_easy_pwd.txt
+nano .secrets/db_root_pwd.txt
+nano .secrets/mysql_pwd.txt
+nano .secrets/pihole_pwd.txt
+nano .secrets/wg_easy_pwd.txt
 
 cp wghole.yaml docker-compose.yml
 
