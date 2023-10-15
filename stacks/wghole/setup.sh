@@ -4,9 +4,9 @@
 # License: MIT
 # https://github.com//Telxey/Docker/raw/main/LICENSE
 
-mkdir /home/docker && mkdir /home/docker/secrets 
-cd .. 
-cd docker
+mkdir /home/docker && mkdir /home/docker/wghole
+cd /home/docker/wghole
+mkdir sedrets
 wget -O wghole.yaml https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/wghole.yaml
 wget -O secrets/db_root_pwd.txt  https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/db_root_pwd.txt
 wget -O secrets/mysql_pwd.txt https://raw.githubusercontent.com/Telxey/Docker/main/stacks/wghole/secrets/mysql_pwd.txt
