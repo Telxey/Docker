@@ -76,20 +76,19 @@ services:
     security_opt:
       - no-new-privileges:true
   wg-easy:
-    # environment:
+    environment:
       # ⚠️ Change the server's hostname (clients will connect to):
       # - WG_HOST=wgn.domain.com
 
       # ⚠️ Change the Web UI Password:
       # - PASSWORD=super_secret_password
-    env_file:
-      - secrets/server.env  
-
       # 💡 This is the Pi-Hole Container's IP Address
       - WG_DEFAULT_DNS=10.13.1.3
       - WG_DEFAULT_ADDRESS=10.13.0.x
     image: weejewel/wg-easy
     container_name: wg-easy
+     env_file:
+      - secrets/server.env  
     volumes:
       - ~/.wg-easy:/etc/wireguard
     ports:
@@ -115,10 +114,10 @@ services:
       # ⚠️ Change the Web UI Password:
       # - WEBPASSWORD=supersecretpassord
       # - TZ=America/New_York
-      - DNS1=172.70.9.2#5053
+      - DNS1=10.13.1.254#5053
       - DNS2=no
       - DNSMASQ_LISTENING=all
-      - VIRTUAL_HOST=wghole.ximp.ly
+      #- VIRTUAL_HOST=wghole.domain.com
     volumes:
       - '~/.pihole/etc-pihole:/etc/pihole'
       - '~/.pihole/etc-dnsmasq.d:/etc/dnsmasq.d'
