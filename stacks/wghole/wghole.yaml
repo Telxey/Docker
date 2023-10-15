@@ -4,13 +4,13 @@ secrets:
   # Secrets are single-line text files where the sole content is the secret
   # Paths in this example assume that secrets are kept in local folder called ".secrets"
   DB_ROOT_PWD:
-    file: secrets/db_root_pwd.txt
+    file: .secrets/db_root_pwd.txt
   MYSQL_PWD:
-    file: secrets/mysql_pwd.txt
+    file: .secrets/mysql_pwd.txt
   PIHOLE_PWD:  
-    file: secrets/pihole_pwd.txt
+    file: .secrets/pihole_pwd.txt
   WG_EASY_PWD:
-    file: secrets/wg_easy_pwd.txt
+    file: .secrets/wg_easy_pwd.txt
     
   app:
     image: 'jc21/nginx-proxy-manager:latest'
@@ -29,7 +29,7 @@ secrets:
       DB_MYSQL_PORT: 3306
       DB_MYSQL_USER: "npm_admin"
       # DB_MYSQL_PASSWORD: "npm_xxxxxxxxx" 
-      DB_MYSQL_PASSWORD__FILE: secrets/MYSQL_PWD
+      DB_MYSQL_PASSWORD__FILE: /run/secrets/MYSQL_PWD
       DB_MYSQL_NAME: "npm_db_ngnix"
       # Uncomment this if IPv6 is not enabled on your host
       # DISABLE_IPV6: 'true'
@@ -50,11 +50,11 @@ secrets:
     restart: unless-stopped
     # environment:
       # MYSQL_ROOT_PASSWORD: 'super-secret-password'
-      MYSQL_ROOT_PASSWORD__FILE: secrets/DB_ROOT_PWD
+      MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
       MYSQL_DATABASE: 'npm_db_ngnix'
       MYSQL_USER: 'npm_admin'
       # MYSQL_PASSWORD: 'npm_xxxxxxxxxx'
-      MYSQL_ROOT_PASSWORD__FILE: secrets/DB_ROOT_PWD
+      MYSQL_ROOT_PASSWORD__FILE: /run/secrets/DB_ROOT_PWD
     volumes:
       - ./mysql:/var/lib/mysql  
     secrets:
@@ -92,7 +92,7 @@ secrets:
 
       # ⚠️ Change the Web UI Password:
       # - PASSWORD=super_secret_password
-      PASSWORD__FILE: secrets/WG_EASY_PWD
+      PASSWORD__FILE: /run/secrets/WG_EASY_PWD
       # 💡 This is the Pi-Hole Container's IP Address
       - WG_DEFAULT_DNS=10.13.1.3
       - WG_DEFAULT_ADDRESS=10.13.0.x
@@ -122,7 +122,7 @@ secrets:
     environment:
       # ⚠️ Change the Web UI Password:
       # - WEBPASSWORD=supersecretpassord
-      WEBPASSWORD__FILE: secrets/PIHOLE_PWD
+      WEBPASSWORD__FILE: /run/secrets/PIHOLE_PWD
       - TZ=America/New_York
       - DNS1=10.13.1.254#5053
       - DNS2=no
