@@ -159,7 +159,8 @@ Each server will run its own PostgreSQL instance, and you'll use Docker to manag
 
 ## Conclusion
 
-This configuration guides you on how to set up PostgreSQL with logical replication across three remote servers using Docker Compose. Make sure to adjust any configurations and considerations based on your infrastructure requirements. If you have any further questions or need clarification on specific points, feel free to ask!
+This configuration guides you on how to set up PostgreSQL with logical replication across three remote servers using Docker Compose. Make sure to adjust any configurations and considerations based on your infrastructure requirements. If you have any further questions or need clarification on specific points, feel free to read official documentation!
+https://dzone.com
 
 
 
