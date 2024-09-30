@@ -25,7 +25,7 @@ Each server will run its own PostgreSQL instance, and you'll use Docker to manag
 
     services:
       postgres_node1:
-        image: postgres:14
+        image: postgres:16
         container_name: postgres_node1
         environment:
           POSTGRES_USER: postgres
@@ -50,7 +50,7 @@ Each server will run its own PostgreSQL instance, and you'll use Docker to manag
 
     services:
       postgres_node2:
-        image: postgres:14
+        image: postgres:16
         container_name: postgres_node2
         environment:
           POSTGRES_USER: postgres
@@ -74,7 +74,7 @@ Each server will run its own PostgreSQL instance, and you'll use Docker to manag
 
     services:
       postgres_node3:
-        image: postgres:14
+        image: postgres:16
         container_name: postgres_node3
         environment:
           POSTGRES_USER: postgres
@@ -111,16 +111,45 @@ Each server will run its own PostgreSQL instance, and you'll use Docker to manag
          
 <h5 align="center">   - Update $${\space \color{aqua} postgresql.conf}$$ for replicattion - </h5>
       
+    ALTER SYSTEM SET max_connections TO 100;
     ALTER SYSTEM SET wal_level TO 'logical';
     ALTER SYSTEM SET max_wal_senders TO 3; 
-    ALTER SYSTEM SET max_replication_senders TO 3;
+    ALTER SYSTEM SET max_replication_slot TO 3;
     ALTER SYSTEM SET track_commit_timestamp TO on;
     SELECT pg_reload_conf();
+<h5 align="left">  ( $${\space \color{red} WARNING\space}$$) 
+   sometime commands not funtions correctly and need to navegate to container directory to edit $${\space \color{aqua} postgresql.conf}$$ fiile usin a text editor to manual edit configuration I use nano for this example  </h5>
 
+    nano <pash_to_diirectory>/pgdata_node1/postgresql.conf
+<p></p>
+        - saving changes and restart container
+
+     docker restart postgres_node1
+<p></p> - to test if all change work run
+
+    docker exec -it postgres_node1 psql -U postgres
+ <p></p> - On log agai on postgres container run
+ 
+    SHOW wal_level;
+    SHOW max_wal_senders;
+    SHOW max_replication_slots;
+    SHOW max_connections;
+    SHOW track_commit_timestamp;  
+    
   <h5 align="center">  - Create a publication for the database - </h5>
         
     CREATE PUBLICATION mypublication FOR ALL TABLES;    
+    
+   * Edit pg_hba.conf: 
+     - Allow the standby nodes to connect to the master for replication. Your pg_hba.conf should have lines like the following to permit replication connections: 
+       - navegate to container directory to edit pg_hba.conf file usin a text editor to manul edit 
+             
+    nano <pash_to_diirectory>/pgdata_node1/postgresql.conf
+<p></p> - copy and paste to end of file. and replace <nodes_ip_address> for respective IP ( remember remove Angle brackets )
 
+    # Allow replication connections from the standby nodes  
+    host    replication     all             <node2_ip_address>/32      md5 
+    host    replication     all             <node3_ip_address>/32      md5   
    * Standby Nodes
       - On Server 2 and Server 3 (Standby Nodes)
         - Connect to the PostgreSQL instances on both servers:
@@ -134,17 +163,44 @@ Each server will run its own PostgreSQL instance, and you'll use Docker to manag
 
 <h5 align="center">   - Update $${\space \color{aqua} postgresql.conf}$$ for replicattion - </h5>
 
+    ALTER SYSTEM SET max_connections TO 100;
     ALTER SYSTEM SET wal_level TO 'logical';
     ALTER SYSTEM SET max_wal_senders TO 3; 
-    ALTER SYSTEM SET max_replication_senders TO 3;
+    ALTER SYSTEM SET max_replication_slot TO 3;
     ALTER SYSTEM SET track_commit_timestamp TO on;
     SELECT pg_reload_conf();
+<h5 align="left">  ( $${\space \color{red} WARNING\space}$$) If have problem using commands on terminal fallow instructions provide for node1 and repit for node2 & node3 </h5>
 <p></p>
  <h5 align="center">  - Create a subscription to the primary node - </h5>
 
-    CREATE SUBSCRIPTION mysubscription CONNECTION 'host=<PRIMARY_NODE_IP> port=5432 user=postgres password=yourpassword dbname=mydatabase' PUBLICATION mypublication;  
+    CREATE SUBSCRIPTION mysubscription CONNECTION 'host=<NODE1_IP_ANDDRESS> port=5432 user=postgres password=yourpassword dbname=mydatabase' PUBLICATION mypublication;  
 
-   Substitute <PRIMARY_NODE_IP> with the actual IP address of your primary node.
+   Substitute <NODE1_IP_ANDDRESS> with the actual IP address of your node1.
+
+* Now edit pg_hba.conf for node2 & node3: 
+     - Allow the standby nodes to connect to the master for replication. Your pg_hba.conf should have lines like the following to permit replication connections: 
+       - navegate to container directory to edit pg_hba.conf file usin a text editor to manul edit.
+  - On node2
+<p></p>
+
+     nano <pash_to_diirectory>/pgdata_node2/postgresql.conf
+
+<p></p> - copy and paste to end of file. and replace <nodes_ip_address> for respective IP ( remember remove Angle brackets )
+
+    # Allow replication connections from the standby nodes  
+    host    replication     all             <node1_ip_address>/32      md5 
+    host    replication     all             <node3_ip_address>/32      md5   
+ <p></p>
+  - On node3
+<p></p>
+
+     nano <pash_to_diirectory>/pgdata_node3/postgresql.conf
+
+<p></p> - copy and paste to end of file. and replace <nodes_ip_address> for respective IP ( remember remove Angle brackets )
+
+    # Allow replication connections from the standby nodes  
+    host    replication     all             <node1_ip_address>/32      md5 
+    host    replication     all             <node2_ip_address>/32      md5
 
 ## Considerations for Network Configuration
 
